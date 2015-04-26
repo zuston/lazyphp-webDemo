@@ -1,0 +1,36 @@
+body{
+	 font-family: "微软雅黑";	
+	}
+	
+h2{
+     color: #000000;
+					
+	}	
+h4{
+	color: #802420;
+}			
+a:hover{
+	 color:black;
+	}
+	
+a{
+	text-decoration: none;
+	}
+	
+#article .active{
+	font-size: 20px;
+	}
+
+.bar-active{
+	background-color: #F16300;
+}
+
+#tab-bar{
+	font-size: 16px;border: 0;border-radius: 0;border-right:2px solid #F4F2EF ;color: #FA7A20;
+}
+.active0{
+	background: #F4F2EF;color: #FA7A20;border: 0;border-right:4px solid #FA7A20 ;
+}
+.active1{
+	color: #FA7A20;border: 0;border-right:2px solid #F4F2EF ;
+}

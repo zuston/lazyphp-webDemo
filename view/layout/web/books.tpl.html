@@ -1,0 +1,126 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<a href="#" class="list-group-item" id='tab-bar'>书籍购买导航</a>
+			<a href="index.php?c=guest&a=books"  <?php if(v('c')=='guest'&&v('a')=='books'):?>class="list-group-item active0" <?php else:?> class="list-group-item active1" <?php endif;?> >热门书籍</a>
+			
+			<a href="#" class="list-group-item" id='tab-bar'>
+				购物管理</a>
+			<a href="index.php?c=guest&a=shopping_car"  <?php if(v('c')=='guest'&&v('a')=='shopping_car'):?>
+			class="list-group-item active0" <?php else:?> class="list-group-item active1" <?php endif;?> >购物车</a>
+			
+			<a href="#" class="list-group-item" id='tab-bar'>系统管理</a>
+			<a href="index.php?c=admin&a=login" class="list-group-item active1">登陆</a>
+		</div>
+		
+		<div class="col-md-9">
+			<div class="col-md-6">
+				<table class="table-striped table-hover table books" border="0" cellspacing="" cellpadding="">
+					<h4>热门书籍推荐</h4>
+					<tr>
+						<th>书号</th>
+						<th>书名</th>
+						<th>作者</th>
+						<th>书价</th>
+					</tr>
+					<?php for($i=0;$i<count($books,COUNT_NORMAL);$i++){ ?>
+					<tr>
+						<td><?=$books[$i]['id'] ?></td>
+						<td><?=$books[$i]['title'] ?></td>
+						<td style="text-align: left;"><?=$books[$i]['author']?></td>
+						<td><?=$books[$i]['price'] ?></td>
+					</tr>
+					<?php } ?>
+				</table>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="row">
+					<div id="container">
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('.books tr').click(function(e){
+			var msg=$(this).children('td:eq(1)').html();
+			var id=$(this).children('td:eq(0)').html();
+			var price=$(this).children('td:eq(3)').html();
+			$.ajax({
+				type: "post",
+				url: "shopping_store.php",
+				async: true,
+				data: 'data='+msg+'&id='+id+'&price='+price,
+				success: function(xml) {
+//					if(xml==1){
+////						window.location.href="?c=guest&a=shopping_store";
+//						alert(xml);
+//					}else{
+//						alert("您还没有添加进入购物车！！！");
+//					}
+					alert(msg+"  这本书已经加入了购物车");
+				},
+				error: function(xml, err) {
+					alert("您还没有加入购物车");
+				}
+			});
+			
+		})
+		return false;
+	})
+	
+	$(function(){
+//		$.ajax({
+//			type:"get",
+//			url:"index.php?c=guest&a=get_grap_data",
+//			async:true,
+//			success: function(xml) {
+//					data=xml;
+//					alert(xml);
+//				},
+//				error: function(xml, err) {
+//					alert("error");
+//				}
+//
+//		});
+		
+//		alert(<?=$grap['number'][1] ?>);
+		$('#container').highcharts({                   //图表展示容器，与div的id保持一致
+        chart: {
+            type: 'pie'                         //指定图表的类型，默认是折线图（line）
+        },
+        title: {
+            text: '热销排行榜'      //指定图表标题
+        },
+        credits: {
+			text: 'baidu.com'
+		},
+
+//      xAxis: {
+//          categories: ['1', '2', '3']   //指定x轴分组
+//      },
+        yAxis: {
+            title: {
+                text: '销量'                  //指定y轴的标题
+            }
+        },
+        series: [{                                 //指定数据列
+            name: '销量',                          //数据列名
+            data: [<?php 
+            		for($i=0;$i<count($grap,COUNT_NORMAL);$i++){
+            			
+            		echo '{"name":"'.$grap[$i]['title'].'","y":'.(400-$grap[$i]['number']).'},';
+            		
+            		} ?>]                      //数据
+//			data: [{"name":"zuston","y":193},{"name":"zuston","y":193},]
+        }]
+    });
+	})
+	
+</script>

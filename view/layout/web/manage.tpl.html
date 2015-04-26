@@ -1,0 +1,162 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<a href="#" class="list-group-item" id='tab-bar'>书籍购买导航</a>
+			<a href="index.php?c=guest&a=books"  <?php if(v('c')=='guest'&&v('a')=='books'):?>class="list-group-item active0" <?php else:?> class="list-group-item active1" <?php endif;?> >热门书籍</a>
+			
+			<a href="#" class="list-group-item" id='tab-bar'>
+				购物管理</a>
+			<a href="index.php?c=guest&a=shopping_car"  <?php if(v('c')=='guest'&&v('a')=='shopping_car'):?>
+			class="list-group-item active0" <?php else:?> class="list-group-item active1" <?php endif;?> >购物车</a>
+			
+			<a href="#" class="list-group-item" id='tab-bar'>系统管理</a>
+			<a href="index.php?c=admin&a=login" class="list-group-item active0">登陆</a>
+		</div>
+		
+		
+		<div class="col-md-7">
+			<div class="row">
+				<div class="col-md-10">
+					<h4>
+						欢迎管理员:
+						<?=$id ?>
+					</h4>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-danger exit">退出登陆</button>
+				</div>
+			</div>
+			<hr />
+			<h4>管理员:</h4>
+			<table class="table table-bordered">
+				<tr>
+					<th>登陆名</th>
+					<th>用户权限</th>
+					<th>管理</th>
+				</tr>
+			<?php for($i=0;$i<count($admin,COUNT_NORMAL);$i++){ ?>
+				<tr class="success">
+					<td class="name"><?=$admin[$i]['name'] ?></td>
+					<td><?=$admin[$i]['permission'] ?></td>
+					<td><a class='delete'><span class='glyphicon glyphicon-remove-circle'></span>&nbsp;&nbsp;删除</a></td>
+				</tr>
+				<?php }?>
+				</table>
+				
+			<h5 style="font-family: '微软雅黑';color: #46A546;">添加管理员:</h5>
+			<form class="form-horizontal" role="form" action="add.php" method="post">
+			   <div class="form-group">
+			      <label for="firstname" class="col-sm-2 control-label">账号</label>
+			      <div class="col-sm-10">
+			         <input type="text" class="form-control" id="firstname" 
+			            placeholder="输入账号" name="name">
+			      </div>
+			   </div>
+			   <div class="form-group">
+			      <label for="lastname" class="col-sm-2 control-label">密码</label>
+			      <div class="col-sm-10">
+			         <input type="text" class="form-control" id="lastname" 
+			            placeholder="输入密码" name="pwd">
+			      </div>
+			   </div>
+			   <div class="form-group">
+			      <label for="lastname" class="col-sm-2 control-label">权限</label>
+			      <div class="col-sm-10">
+			         <div class="radio">
+						   <label>
+						      <input type="radio" name="optionsRadios" id="optionsRadios1" 
+						         value="root" checked> root
+						   </label>
+						</div>
+						<div class="radio">
+						   <label>
+						      <input type="radio" name="optionsRadios" id="optionsRadios2" 
+						         value="observer">
+						         observer
+						   </label>
+						</div>
+			         
+			      </div>
+			   </div>
+			
+			   <div class="form-group">
+			      <div class="col-sm-offset-2 col-sm-10">
+			         <button type="submit" class="btn btn-danger submit_admin">添加</button>
+			      </div>
+			   </div>
+			</form>
+				
+			<hr />
+			<table border="0" cellspacing="" cellpadding="" class="table table-bordered">
+				<h4>全部书籍目录情况</h4>
+				<tr>
+					<th>书号</th>
+					<th>类型</th>
+					<th>书名</th>
+					<th>价格</th>
+					<th>作者</th>
+					<th>数量</th>
+					<th>损坏情况</th>
+					
+				</tr>
+				<?php for($i=0;$i<count($books,COUNT_NORMAL);$i++){ ?>
+				<tr>
+					<td><?=$books[$i]['id'] ?></td>
+					<td><?=$books[$i]['type'] ?></td>
+					<td><?=$books[$i]['title'] ?></td>
+					<td><?=$books[$i]['price'] ?></td>
+					<td><?=$books[$i]['author'] ?></td>
+					<td><?=$books[$i]['number'] ?></td>
+					<td><?=$books[$i]['broken'] ?></td>
+				</tr>
+				<?php }?>
+			</table>
+			
+			<hr />
+			<h4>仓库订单自动生成(数量<=50)</h4>
+				<table border="" cellspacing="" cellpadding=""  class="table table-bordered">
+					<tr><th>书号</th>
+						<th>书名</th>
+						<th>损坏程度</th>
+						<th>订购数量</th>
+					</tr>
+					<?php for($i=0;$i<count($order,COUNT_NORMAL);$i++){ ?>
+					<tr class="warning">
+						<td><?=$order[$i]['id'] ?></td>
+						<td><?=$order[$i]['title'] ?></td>
+						<td><?=$order[$i]['broken'] ?></td>
+						<td><?=400-$order[$i]['number'] ?></td>
+					</tr>
+					<?php } ?>
+				</table>
+			</div>
+		</div>
+				</div>
+	
+</div>
+<script>
+	$(function(){
+		$('.exit').click(function(){
+			window.location.href="exit_login.php";
+		})
+		
+		$('.delete').click(function(){
+			var name=$(this).parent().prevAll('.name').html();
+//			alert(name);
+			$.ajax({
+				type:"post",
+				url:"delete.php",
+				async:true,
+				data:"name="+name,
+				success: function(xml) {
+//					alert("书号为  "+id+"  书籍购买成功");
+					window.location.href="index.php?c=admin&a=login";
+//					alert(name);
+				},
+				error: function(xml, err) {
+					alert("删除失败了,再试一下");
+				}
+			});
+		})
+	})
+</script>

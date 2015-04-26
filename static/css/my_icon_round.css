@@ -1,0 +1,17 @@
+li a span {
+	/*background: url(static/image/2.jpg) no-repeat;*/
+	display: block;
+	width:70px;
+	height: 70px;
+	margin-left: 20px;
+	position: relative;
+	z-index: 10;
+	-webkit-transition: -webkit-transform 0.9s ease-out;
+	-moz-transition: -moz-transform 0.9s ease-out;
+	transition: transform 0.9s ease-out;
+}
+li a:hover span {
+	-webkit-transform: rotate(360deg);
+	-moz-transform: rotate(360deg);
+	transform: rotate(360deg);
+}
